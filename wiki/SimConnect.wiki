@@ -1,4 +1,4 @@
-#summary SimConnect is a component of the Micosoft ESP SDK.
+#summary SimConnect is a component of the Microsoft ESP SDK.
 
 From the MSDN:
 
