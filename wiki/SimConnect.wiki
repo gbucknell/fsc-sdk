@@ -1,5 +1,7 @@
 #summary SimConnect is a component of the Micosoft ESP SDK
 
+= Introduction =
+
 The SimConnect SDK is the programmer's interface to ESP. There are many possible uses of this interface, including writing add-ons to control the weather system, manage AI-controlled aircraft, and intercept key events and provide a different response than the default coded into the simulator.
 
 SimConnect uses a client-server model to enable communications between a client written by a third party and the simulator. Typically, a client first requests that communications be opened up with the server, and then makes a list of requests for certain types of information, or system events, to be passed to the client. The asynchronous nature of client-server programming means that the client then waits for the data to be returned. The last processing a typical client normally does is cleanly terminate communications with the server, and then shut down. Many clients can be running at one time, and a priority system has been defined to determine which client receives the requested information in which order. Clients can also communicate remotely with the server.
