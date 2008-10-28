@@ -4,4 +4,4 @@ OpenCockpit, the maker of the IOCard system, is one of the main "free"^1^ soluti
 
 More information on their [http://www.opencockpits.com web site].
 
-_1. for non-commercial use only._
+,,1. for non-commercial use only.,,
