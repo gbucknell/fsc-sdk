@@ -1,13 +1,17 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
+= Prerequisites =
+I do my best to keep the dependancies to third party libraries as small as possible. All the required tools and libraries given in the next sections are Open Source or available for free.
 
-Add your content here.
+== Skills ==
+SDKs
+emphazises some good practicices of the boost community (the anti-chamber of the standard c++ libraries)    
 
+== Tools ==
+  * A c++ compiler. I suggest [http://www.microsoft.com/vstudio/express Visual C++ Express], a free IDE available from Microsoft.
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Librairies ==
+  * FSX SDK available from [http://www.fsinsider.com fsinsider] or the [http://msdn.microsoft.com MSDN web site]
+  * Windows SDK (formely Platform SDK) available from the [http://msdn.microsoft.com MSDN web site]
+  * Windows WDK (driver SDK) available from the [http://msdn.microsoft.com MSDN web site]
+  * Boost libraries available from the [http://www.boost.org Boost web site]
