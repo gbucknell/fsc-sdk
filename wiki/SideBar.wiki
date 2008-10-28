@@ -1,8 +1,4 @@
 #summary One-sentence summary of this page.
 
 = [Introduction] =
-== [Rational] ==
-== [License] ==
-
-= [Installation] =
-== [Prerequisites] ==
+= [Getting started] =
