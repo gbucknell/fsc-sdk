@@ -2,4 +2,4 @@
 
 OpenCockpit, the maker of IOCards, is one of the main "open" solution for cockpit makers. They design both hardware and software to solve any request from anyone that wants to build a home cockpit, panels or more simple accesories with *simplicity and modularity* in mind.
 
-More information on their web site.
+More information on their [http://www.opencockpits.com web site].
