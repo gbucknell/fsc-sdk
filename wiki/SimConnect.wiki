@@ -1,7 +1,5 @@
 #summary SimConnect is a component of the Micosoft ESP SDK.
 
-= Introduction =
-
 From the MSDN:
 
  The SimConnect SDK is the programmer's interface to ESP. There are many possible uses of this interface, including writing add-ons to control the weather system, manage AI-controlled aircraft, and intercept key events and provide a different response than the default coded into the simulator.
