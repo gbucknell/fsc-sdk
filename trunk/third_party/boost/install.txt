@@ -1,0 +1,3 @@
+Unzip in a boost subdirectory
+Remove Jamroot
+Remove boost-build.jam

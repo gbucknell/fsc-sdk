@@ -1,0 +1,117 @@
+#  c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+import modules ;
+import set ;
+import stage ;
+import package ;
+import path ;
+import common ;
+import os ;
+import regex ;
+import errors ;
+import "class" : new ;
+import common ;
+import sequence ;
+
+
+path-constant BOOST_ROOT : . ;
+
+
+local boost-root = [ path.make "./boost" ] ;
+local vault-root = [ path.make "./vault" ] ;
+
+
+project all-boost
+   : requirements <include>$(boost-root) <include>$(vault-root)
+     # disable auto-linking for all targets here,
+     # primarily because it caused troubles with V2
+     <define>BOOST_ALL_NO_LIB=1
+     <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+     <define>BOOST_UBLAS_USE_ITERATING 
+     <threading>multi:<define>BOOST_HAS_THREADS
+     <toolset>msvc:<define>_SECURE_SCL=0
+     <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
+   : usage-requirements <include>$(boost-root) <include>$(vault-root)
+     # disable auto-linking for all targets here,
+     # primarily because it caused troubles with V2
+     <define>BOOST_ALL_NO_LIB=1
+     <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+     <define>BOOST_UBLAS_USE_ITERATING
+     <threading>multi:<define>BOOST_HAS_THREADS
+     <toolset>msvc:<define>_SECURE_SCL=0
+     <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
+   ;
+
+
+# header only libs
+alias headers : : : : <include>$(boost-root) <include>$(vault-root) ;
+
+
+# iostream configuration
+# path-constant ZLIB_SOURCE : ../zlib/zlib ;
+# constant NO_BZIP2 : 1 ;
+
+
+# This rule should be called from libraries' Jamfiles and will
+# create two targets, "install" and "stage", that will install
+# or stage that library. The --prefix option is respected, but
+# --with and --without options, naturally, are ignored.
+#
+# - libraries -- list of library targets to install.
+rule boost-install ( libraries * )
+{
+    package.install install
+        : <dependency>/boost//install-headers $(install-requirements)
+        : # No binaries
+        : $(libraries)
+        : # No headers, it's handled by the dependency
+    ;
+
+    install stage : $(libraries) : <location>$(BOOST_STAGE_LOCATE) ;
+
+    local c = [ project.current ] ;
+    local project-module = [ $(c).project-module ] ;
+    module $(project-module)
+    {
+        explicit stage ;
+        explicit install ;
+    }
+}
+
+
+# Make boost project ids of all libraries known.
+local libraries = [ MATCH .*libs/(.*) : [ glob $(boost-root)/libs/* ] ] ;
+local builds ;
+for local l in $(libraries)
+{
+   builds += [ MATCH .*libs/(.*)/build : [ glob $(boost-root)/libs/$(l)/* ] ] ;
+}
+
+for local b in $(builds)
+{
+   # Boost.Python and Boost.Ggraph are not used
+   if ( $(b) != "graph" ) &&
+      ( $(b) != "python" )
+   {
+      # ECHO "lib : " $(b) ;
+      use-project /boost/$(b) : $(boost-root)/libs/$(b)/build ;
+   }
+}
+
+
+# Make vault project ids of all libraries known.
+local libraries = [ MATCH .*libs/(.*) : [ glob $(vault-root)/libs/* ] ] ;
+local builds ;
+for local l in $(libraries)
+{
+   builds += [ MATCH .*libs/(.*)/build : [ glob $(vault-root)/libs/$(l)/* ] ] ;
+}
+
+for local b in $(builds)
+{
+   # ECHO "lib : " $(b) ;
+   use-project /boost/$(b) : $(vault-root)/libs/$(b)/build ;
+}
