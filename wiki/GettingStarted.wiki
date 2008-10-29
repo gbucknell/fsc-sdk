@@ -14,5 +14,5 @@ emphazises some good practicices of the boost community (the anti-chamber of the
 == Librairies ==
   * FSX SDK available from [http://www.fsinsider.com fsinsider] or the [http://msdn.microsoft.com MSDN web site]
   * Windows SDK (formely Platform SDK) available from the [http://msdn.microsoft.com MSDN web site]
-  * Windows WDK (driver SDK) available from the [http://msdn.microsoft.com MSDN web site]
+  * Windows WDK (formely DDK) available from the [http://msdn.microsoft.com MSDN web site]
   * Boost libraries available from the [http://www.boost.org Boost web site]
