@@ -1,4 +1,5 @@
 #summary A step by step installation guide.
+#labels Featured
 
 = Prerequisites =
 I do my best to keep the dependancies to third party libraries as small as possible. All the required tools and libraries given in the next sections are Open Source or available for free.
