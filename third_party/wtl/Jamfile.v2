@@ -1,0 +1,28 @@
+#  c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+import path ;
+local atl-root = [ path.make "./atl" ] ;
+local wtl-root = [ path.make "./wtl" ] ;
+
+project wtl
+   : requirements
+     <define>_WTL_NEW_PAGE_NOTIFY_HANDLERS
+     <define>_WTL_USE_CSTRING
+	 <define>_UNICODE
+   : usage-requirements
+     <define>_WTL_NEW_PAGE_NOTIFY_HANDLERS
+	 <define>_WTL_USE_CSTRING
+	 <define>_UNICODE
+   ;
+
+
+alias headers
+   : # no sources
+   : # no requirement
+   : # no default-build
+   : <include>$(atl-root)/include
+     <include>$(wtl-root)/include
+   ;
