@@ -1,4 +1,5 @@
 #summary Read the motivations.
+#labels Featured
 
 From Flight Simulator X, our favorite game has its standard, official, API. While its probably an excellent news, its use slows to spread within the home cockpit builder community.
 
