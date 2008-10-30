@@ -3,10 +3,9 @@
 #  See http://code.google.com/p/fsc-sdk/ for the library home page.
 
 
-import path ;
+project wsk ;
 
-project win32 ;
-
+# Windows SDK
 lib gdi32 : : <name>gdi32 ;
 lib user32 : : <name>user32 ;
 lib comctl32 : : <name>comctl32 ;
