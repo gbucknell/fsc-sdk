@@ -20,3 +20,5 @@ emphazises some good practicices of the boost community (the anti-chamber of the
 Note : The few files that part of the Windows WDK (formerly DDK) are provided.
 
 = Installation =
+
+== The third party libraries ==
