@@ -12,7 +12,11 @@ emphazises some good practicices of the boost community (the anti-chamber of the
   * A c++ compiler. I suggest [http://www.microsoft.com/vstudio/express Visual C++ Express], a free IDE available from Microsoft.
 
 == Librairies ==
-  * FSX SDK available from [http://www.fsinsider.com fsinsider] or the [http://msdn.microsoft.com MSDN web site]
+  * FSX SDK available from your FSX installation DVD (Delux Edition only). Service Packs are available at [http://www.fsinsider.com fsinsider] or the [http://msdn.microsoft.com MSDN web site]
   * Windows SDK (formerly Platform SDK) available from the [http://msdn.microsoft.com MSDN web site]
-  * Windows WDK (formerly DDK) available from the [http://msdn.microsoft.com MSDN web site]
+  * Windows WTL available from the [http://wtl.sourceforge.net Sourceforge]
   * Boost libraries available from the [http://www.boost.org Boost web site]
+
+Note : The few files that part of the Windows WDK (formerly DDK) are provided.
+
+= Installation =
