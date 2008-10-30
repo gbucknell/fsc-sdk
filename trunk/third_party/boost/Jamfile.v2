@@ -21,11 +21,11 @@ path-constant BOOST_ROOT : . ;
 
 
 local boost-root = [ path.make "./boost" ] ;
-local vault-root = [ path.make "./vault" ] ;
+local sandbox-root = [ path.make "./sandbox" ] ;
 
 
 project all-boost
-   : requirements <include>$(boost-root) <include>$(vault-root)
+   : requirements <include>$(boost-root) <include>$(sandbox-root)
      # disable auto-linking for all targets here,
      # primarily because it caused troubles with V2
      <define>BOOST_ALL_NO_LIB=1
@@ -34,7 +34,7 @@ project all-boost
      <threading>multi:<define>BOOST_HAS_THREADS
      <toolset>msvc:<define>_SECURE_SCL=0
      <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
-   : usage-requirements <include>$(boost-root) <include>$(vault-root)
+   : usage-requirements <include>$(boost-root) <include>$(sandbox-root)
      # disable auto-linking for all targets here,
      # primarily because it caused troubles with V2
      <define>BOOST_ALL_NO_LIB=1
@@ -47,7 +47,7 @@ project all-boost
 
 
 # header only libs
-alias headers : : : : <include>$(boost-root) <include>$(vault-root) ;
+alias headers : : : : <include>$(boost-root) <include>$(sandbox-root) ;
 
 
 # iostream configuration
@@ -102,16 +102,16 @@ for local b in $(builds)
 }
 
 
-# Make vault project ids of all libraries known.
-local libraries = [ MATCH .*libs/(.*) : [ glob $(vault-root)/libs/* ] ] ;
+# Make sandbox project ids of all libraries known.
+local libraries = [ MATCH .*libs/(.*) : [ glob $(sandbox-root)/libs/* ] ] ;
 local builds ;
 for local l in $(libraries)
 {
-   builds += [ MATCH .*libs/(.*)/build : [ glob $(vault-root)/libs/$(l)/* ] ] ;
+   builds += [ MATCH .*libs/(.*)/build : [ glob $(sandbox-root)/libs/$(l)/* ] ] ;
 }
 
 for local b in $(builds)
 {
    # ECHO "lib : " $(b) ;
-   use-project /boost/$(b) : $(vault-root)/libs/$(b)/build ;
+   use-project /boost/$(b) : $(sandbox-root)/libs/$(b)/build ;
 }

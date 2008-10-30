@@ -1,0 +1,8 @@
+This folder contains all the third parties libraries on which LIQUID(r) depends:
+
+Boost C++ - www.boost.org
+GMM++ - www-gmm.insa-toulouse.fr/getfem/gmm_intro
+hdf5 - http://hdf.ncsa.uiuc.edu/hdf5/
+szib - http://hdfgroup.com/doc_resource/szip/
+zlib - http://www.zlib.net/
+wtl - http://wtl.sourceforge.net/

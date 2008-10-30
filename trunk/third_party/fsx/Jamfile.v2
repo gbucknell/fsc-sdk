@@ -1,0 +1,10 @@
+#  c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+import path ;
+
+project fsx ;
+
+lib simconnect : : <name>simconnect ;
