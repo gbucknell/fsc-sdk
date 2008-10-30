@@ -1,4 +1,4 @@
-#summary Coding conventions
+#summary Coding conventions and recommandations.
 
 = Introduction =
 
