@@ -1,0 +1,15 @@
+#  c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+project wdk
+   :
+   : requirements
+     <include>include
+   : usage-requirements
+     <include>include
+   ;
+
+lib hid : : <name>hid <search>lib ;
+lib setupapi : : <name>setupapi <search>lib ;

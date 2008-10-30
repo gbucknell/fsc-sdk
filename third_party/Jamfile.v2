@@ -1,0 +1,27 @@
+#  c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+import pch ;
+
+project third_party ;
+
+
+use-project /all-boost : boost ;
+use-project /wsk : wsk ;
+use-project /wdk : wdk ;
+use-project /wtl : wtl ;
+use-project /zlib : zlib ;
+use-project /fsx : fsx ;
+
+# precompiled header
+cpp-pch pch
+   : precompiled_header.h
+     /all-boost//headers
+	 /wtl
+	 /wdk
+   : <include>.
+   :
+   : <include>.
+   ;
