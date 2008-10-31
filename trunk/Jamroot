@@ -1,0 +1,44 @@
+#  c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+import path ;
+
+
+path-constant FSC_ROOT : . ;
+
+
+project fsc
+   : 
+   : requirements
+     # remove the nasty min and max macro of NT headers
+     # <os>NT:<define>NOMINMAX
+     # remove the deprecated warnings
+     <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+     <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+	 # unicode
+	 <toolset>msvc:<define>UNICODE
+	 <toolset>msvc:<define>_UNICODE
+     # remove the secure check
+     <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
+     <toolset>msvc:<define>_SCL_SECURE=0
+     # add SSE2 and global optimization
+     #<toolset>msvc:<cxxflags>/arch:SSE2
+     #<toolset>msvc:<cxxflags>/GL
+     #<toolset>msvc:<linkflags>/LTCG
+     <define>BOOST_ALL_NO_LIB=1	 
+   : default-build
+     # by default, link is static
+     <link>static
+     <runtime-link>static
+   : build-dir bin
+   ;
+
+
+use-project /sdk : sdk/build ;
+use-project /tp : third_party ;
+
+
+echo "Building FSC examples..." ;
+build-project examples ;
