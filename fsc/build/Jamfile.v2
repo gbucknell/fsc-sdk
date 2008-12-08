@@ -29,7 +29,7 @@ lib fsc-sdk
 
 exe fsc
    : main.cpp
-     # main.rc
+     fsc.rc
      /tp//pch
      /all-boost//headers
 	  /boost/program_options
