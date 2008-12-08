@@ -34,9 +34,19 @@ extern "C"
 #include <boost/program_options.hpp>
 #include <boost/python.hpp>
 
+#include "resource.h"
+#include <gui/splash_wnd.h>
+
 namespace po = boost::program_options;
 namespace py = boost::python;
 namespace lg = boost::logging;
+
+
+//Global ATL module
+CAppModule _Module;
+
+void init_wtl(HINSTANCE _hInstance);
+void uninit_wtl();
 
 
 //int _tmain(int argc, _TCHAR* argv[])
@@ -76,11 +86,16 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
     po::store(po::wcommand_line_parser(args).options(cmd_line_opts).positional(p).run(), vm);
     po::notify(vm);    
 
+    //Init logging
     init_logs();
+
+    //Init GUI components
+    init_wtl(_hInstance);
 
     if (! vm.count("nologo"))
     {
-        //TODO Welcome splash screen
+        //Show splash screen
+        new gui::splash_wnd(IDB_SPLASH, 3000, NULL);
     }
 
     if (vm.count("help") || cockpit_file.empty())
@@ -230,7 +245,6 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
 
             }
         }
-
     }
     catch(char* _ex)
     {
@@ -253,5 +267,31 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         PyErr_Print();
     };
 
+    uninit_wtl();
+
     return 0;
+}
+
+
+void init_wtl(HINSTANCE _hInstance)
+{
+    HRESULT hRes = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    ATLASSERT(SUCCEEDED(hRes));
+
+    // this resolves ATL window thunking problem when Microsoft Layer for Unicode (MSLU) is used
+    ::DefWindowProc(NULL, 0, 0, 0L);
+
+    AtlInitCommonControls(ICC_COOL_CLASSES | ICC_BAR_CLASSES);	// add flags to support other controls
+
+    hRes = _Module.Init(NULL, _hInstance);
+    ATLASSERT(SUCCEEDED(hRes));
+
+    AtlAxWinInit();
+}
+
+
+void uninit_wtl()
+{
+    _Module.Term();
+    ::CoUninitialize();
 }
