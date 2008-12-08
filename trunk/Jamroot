@@ -28,6 +28,7 @@ project fsc
      #<toolset>msvc:<cxxflags>/GL
      #<toolset>msvc:<linkflags>/LTCG
      <define>BOOST_ALL_NO_LIB=1	 
+     <source>/boost/python//boost_python
    : default-build
      # by default, link is static
      <link>static
@@ -36,9 +37,8 @@ project fsc
    ;
 
 
-use-project /sdk : sdk/build ;
 use-project /tp : third_party ;
 
 
-echo "Building FSC examples..." ;
-build-project examples ;
+echo "Building FSC..." ;
+build-project fsc/build ;
