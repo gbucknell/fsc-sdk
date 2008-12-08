@@ -1,0 +1,51 @@
+#  (c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+project fsc
+   : source-location ../src
+   : requirements
+     <include>../include
+   : usage-requirements
+     <include>../include
+   ;
+
+
+lib fsc-sdk
+   : cockpit.cpp
+     log.cpp
+     win_human_input_device.cpp
+     iocards_usb_expansion_card.cpp
+     iocards_master_card.cpp
+     # fsx_dispatch_proc.cpp
+     /all-boost//headers
+     /tp//pch
+     /wsk
+     /wdk
+     /fsx
+   ;
+
+
+exe fsc
+   : main.cpp
+     # main.rc
+     /tp//pch
+     /all-boost//headers
+	  /boost/program_options
+	  # /wsk
+	  # /wdk
+	  /fsc//fsc-sdk
+   : <include>.
+     <user-interface>gui
+   :
+   : <include>.
+   ;
+
+
+install dist
+   : fsc
+   : <install-dependencies>off
+     <install-type>EXE
+     <location>$(FSC_ROOT)/dist
+   ;
