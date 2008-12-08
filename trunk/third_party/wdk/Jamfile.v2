@@ -11,5 +11,8 @@ project wdk
      <include>include
    ;
 
-lib hid : : <name>hid <search>lib ;
-lib setupapi : : <name>setupapi <search>lib ;
+# lib hid : : <name>hid <search>lib ;
+# lib setupapi : : <name>setupapi <search>lib ;
+
+lib hid : : <file>lib/hid.lib ;
+lib setupapi : : <file>lib/setupapi.lib ;
