@@ -43,6 +43,7 @@
 #include <boost/program_options.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/python.hpp>
 
 //WTL
 //// Change these values to use different versions
