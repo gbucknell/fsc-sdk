@@ -58,7 +58,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
     std::vector<std::wstring> args = po::split_winmain(_lpstrCmdLine);
 
     std::string prog_name(args[0].begin(), args[0].end());
-    std::string cockpit_file;
+    std::wstring cockpit_file;
 
     // Declare the supported options.
     lg::level::type log_level;
@@ -67,25 +67,25 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         ("nologo", "suppress startup splash screen")
         ("version,v", "print version string")
         ("help", "produce help message")
-        ("log-level", po::value<lg::level::type>(&log_level)->default_value(lg::level::error), "set log level (0-5000)")
+        ("log-level", po::wvalue<lg::level::type>(&log_level)->default_value(lg::level::error), "set log level (0-5000)")
         ;
 
     //Cockpit positional option
     po::options_description cockpit_opts("Cockpit options");
     cockpit_opts.add_options()
-		("cockpit", po::value<std::string>(&cockpit_file), "the path of the cockpit file");
+		("cockpit", po::wvalue<std::wstring>(&cockpit_file), "the path of the cockpit file");
 
     po::positional_options_description p;
     p.add("cockpit", -1);
 
-    po::options_description cmd_line_opts("USAGE : " + prog_name + " [options] <project> where options may be");
+    po::options_description cmd_line_opts("USAGE : " + prog_name + " [options] <cockpit> where options may be");
     cmd_line_opts.add(other_opts);
 
     po::options_description all_opts;
     all_opts.add(other_opts).add(cockpit_opts);
 
     po::variables_map vm;
-    po::store(po::wcommand_line_parser(args).options(cmd_line_opts).positional(p).run(), vm);
+    po::store(po::wcommand_line_parser(args).options(all_opts).positional(p).run(), vm);
     po::notify(vm);    
 
     //Init logging
@@ -181,7 +181,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         usb.read(input_buffer);
 
         // Initialize cockpit
-        cockpit ckpt(cockpit_file);
+        cockpit ckpt(boost::to_utf8(cockpit_file));
         ckpt.initialize(sc);
 
 		// Set a notification when the simulation starts so we can get initial value
