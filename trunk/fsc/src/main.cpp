@@ -10,6 +10,8 @@
 
 
 #include "precompiled_header.h"
+#include "resource.h"
+
 #include <iomanip>
 #include <log.hpp>
 #include <cockpit.hpp>
@@ -34,8 +36,8 @@ extern "C"
 #include <boost/program_options.hpp>
 #include <boost/python.hpp>
 
-#include "resource.h"
 #include <gui/splash_wnd.hpp>
+#include <gui/taskbar_notify_icon.hpp>
 
 namespace po = boost::program_options;
 namespace py = boost::python;
