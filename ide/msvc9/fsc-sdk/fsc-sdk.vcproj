@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="fsc-sdk"
 	ProjectGUID="{9A5C4456-9813-41CB-88F5-58713E6F7816}"
+	RootNamespace="fsc-sdk"
 	Keyword="MakeFileProj"
 	TargetFrameworkVersion="196613"
 	>
@@ -23,8 +24,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="..\..\..\..\tools\ntx86\bjam debug --toolset=msvc ..\..\..\.."
-				ReBuildCommandLine="..\..\..\..\tools\ntx86\bjam debug -a --toolset=msvc ..\..\..\.."
+				BuildCommandLine="..\..\..\tools\ntx86\bjam debug --toolset=msvc ..\..\.."
+				ReBuildCommandLine="..\..\..\tools\ntx86\bjam debug -a --toolset=msvc ..\..\.."
 				CleanCommandLine=""
 				Output=""
 				PreprocessorDefinitions="WIN32;_DEBUG"
@@ -65,7 +66,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\..\fsc\src\main.cpp"
+				RelativePath="..\..\..\fsc\src\main.cpp"
 				>
 			</File>
 		</Filter>
