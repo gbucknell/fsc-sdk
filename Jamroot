@@ -17,22 +17,21 @@ project fsc
      # remove the deprecated warnings
      <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-	 # unicode
-	 <toolset>msvc:<define>UNICODE
-	 <toolset>msvc:<define>_UNICODE
+	   # unicode
+	   <toolset>msvc:<define>UNICODE
+	   <toolset>msvc:<define>_UNICODE
      # remove the secure check
      <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
-     <toolset>msvc:<define>_SCL_SECURE=0
+     <toolset>msvc:<define>_SECURE_SCL=0
      # add SSE2 and global optimization
      #<toolset>msvc:<cxxflags>/arch:SSE2
      #<toolset>msvc:<cxxflags>/GL
      #<toolset>msvc:<linkflags>/LTCG
-     <define>BOOST_ALL_NO_LIB=1	 
-     <source>/boost/python//boost_python
+     <define>BOOST_ALL_NO_LIB=1     
    : default-build
      # by default, link is static
      <link>static
-     <runtime-link>static
+     #<runtime-link>static
    : build-dir bin
    ;
 
