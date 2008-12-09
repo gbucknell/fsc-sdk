@@ -33,10 +33,11 @@ exe fsc
      fsc.rc
      /tp//pch
      /all-boost//headers
-	  /boost/program_options
-	  # /wsk
-	  # /wdk
-	  /fsc//fsc-sdk
+	   /boost/program_options
+	   /boost/python//boost_python
+	   # /wsk
+	   # /wdk
+	   /fsc//fsc-sdk
    : <include>.
      <user-interface>gui
    :
