@@ -35,7 +35,7 @@ extern "C"
 #include <boost/python.hpp>
 
 #include "resource.h"
-#include <gui/splash_wnd.h>
+#include <gui/splash_wnd.hpp>
 
 namespace po = boost::program_options;
 namespace py = boost::python;
