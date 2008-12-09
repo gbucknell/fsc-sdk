@@ -92,14 +92,12 @@ for local l in $(libraries)
 
 for local b in $(builds)
 {
-   # Boost.Python and Boost.Ggraph are not used
-   if ( $(b) != "graph" ) &&
-      ( $(b) != "python" )
-   {
-      # ECHO "lib : " $(b) ;
-      use-project /boost/$(b) : $(boost-root)/libs/$(b)/build ;
-   }
+   use-project /boost/$(b) : $(boost-root)/libs/$(b)/build ;
 }
+
+# location of python
+local python-root = [ MATCH "^--with-python-root=(.*)" : [ modules.peek : ARGV ] ] ;
+PYTHON_ROOT ?= $(python-root) ;
 
 
 # Make sandbox project ids of all libraries known.
