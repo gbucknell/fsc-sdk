@@ -19,6 +19,7 @@ lib fsc-sdk
      iocards_usb_expansion_card.cpp
      iocards_master_card.cpp
      # fsx_dispatch_proc.cpp
+     gui_taskbar_notify_icon.cpp
      /all-boost//headers
      /tp//pch
      /wsk
