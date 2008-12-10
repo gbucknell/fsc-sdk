@@ -15,12 +15,14 @@ use-project /wtl : wtl ;
 use-project /zlib : zlib ;
 use-project /fsx : fsx ;
 
+
 # precompiled header
 cpp-pch pch
    : precompiled_header.h
      /all-boost//headers
-	 /wtl
-	 /wdk
+     /boost/python//boost_python
+     /wtl
+     /wdk
    : <include>.
    :
    : <include>.
