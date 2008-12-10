@@ -12,36 +12,24 @@ project fsc
    ;
 
 
-lib fsc-sdk
+exe fsc
    : cockpit.cpp
      log.cpp
      win_human_input_device.cpp
      iocards_usb_expansion_card.cpp
      iocards_master_card.cpp
      # fsx_dispatch_proc.cpp
-     gui_taskbar_notify_icon.cpp
-     /all-boost//headers
-     /tp//pch
-     /wsk
-     /wdk
-     /fsx
-   ;
-
-
-exe fsc
-   : main.cpp
+     gui_taskbar_notify_icon.cpp   
+     main.cpp
      fsc.rc
      /tp//pch
      /all-boost//headers
-	   /boost/program_options
-	   /boost/python//boost_python
-	   # /wsk
-	   # /wdk
-	   /fsc//fsc-sdk
-   : <include>.
-     <user-interface>gui
-   :
-   : <include>.
+	  /boost/program_options
+	  /boost/python//boost_python
+	  /wsk
+	  /wdk
+     /fsx
+   : <user-interface>gui
    ;
 
 
