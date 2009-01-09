@@ -36,6 +36,7 @@ extern "C"
 #include <boost/program_options.hpp>
 #include <boost/python.hpp>
 
+#include <gui/init.hpp>
 #include <gui/splash_wnd.hpp>
 #include <gui/taskbar_notify_icon.hpp>
 
@@ -92,7 +93,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
     init_logs();
 
     //Init GUI components
-    init_wtl(_hInstance);
+    gui::init_wtl(_hInstance);
 
     if (! vm.count("nologo"))
     {
@@ -148,6 +149,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
 
         //Start the python interpreter
         Py_Initialize();
+        atexit(Py_Finalize);
 
         LINFO_ << "Python is initialized!";
 
@@ -157,7 +159,8 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         py::object ignored = py::exec("hello = file('hello.txt', 'w')\n"
                               "hello.write('Hello world!')\n"
                               "hello.close()",
-                              main_namespace);
+                              main_namespace,
+                              py::dict());  //BUG: default parameters are wrong
 
 /*
         // Get capabilities of the HW
@@ -269,31 +272,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         PyErr_Print();
     };
 
-    uninit_wtl();
+    gui::uninit_wtl();
 
     return 0;
-}
-
-
-void init_wtl(HINSTANCE _hInstance)
-{
-    HRESULT hRes = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
-    ATLASSERT(SUCCEEDED(hRes));
-
-    // this resolves ATL window thunking problem when Microsoft Layer for Unicode (MSLU) is used
-    ::DefWindowProc(NULL, 0, 0, 0L);
-
-    AtlInitCommonControls(ICC_COOL_CLASSES | ICC_BAR_CLASSES);	// add flags to support other controls
-
-    hRes = _Module.Init(NULL, _hInstance);
-    ATLASSERT(SUCCEEDED(hRes));
-
-    AtlAxWinInit();
-}
-
-
-void uninit_wtl()
-{
-    _Module.Term();
-    ::CoUninitialize();
 }
