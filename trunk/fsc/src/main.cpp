@@ -40,6 +40,8 @@ extern "C"
 #include <gui/splash_wnd.hpp>
 #include <gui/taskbar_notify_icon.hpp>
 
+#include <python.hpp>
+
 namespace po = boost::program_options;
 namespace py = boost::python;
 namespace lg = boost::logging;
@@ -127,10 +129,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         // Open USB expansion
         iocards::usb_expansion_card usb;
         if (! usb.open(1, 2, hid_event.get()))
-        {
-            LERR_ << "Failed to open hardware!";
             throw "Failed to open hardware!";
-        }
         
         LINFO_ << "Connected to HID!";
 
@@ -140,28 +139,19 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         //Open SimConnect
         fsx::sim_connect sc;
         if (!SUCCEEDED(sc.open("Client Event", NULL, 0, simconn_event.get(), 0)))
-        {
-            LERR_ << "Failed to connect to Flight Simulator!";
             throw "Failed to connect to Flight Simulator!";
-        }
 
         LINFO_ << "Connected to Flight Simulator!";
+
+        // Register the module with the interpreter
+        if (PyImport_AppendInittab("fsc", initfsc) == -1)
+            throw std::runtime_error("Failed to add fsc module to the python interpreter");
 
         //Start the python interpreter
         Py_Initialize();
         atexit(Py_Finalize);
 
         LINFO_ << "Python is initialized!";
-
-        py::object main_module = py::import("__main__");
-        py::object main_namespace = main_module.attr("__dict__");
-
-        py::object ignored = py::exec("hello = file('hello.txt', 'w')\n"
-                              "hello.write('Hello world!')\n"
-                              "hello.close()",
-                              main_namespace,
-                              py::dict());  //BUG: default parameters are wrong
-
 /*
         // Get capabilities of the HW
         HIDP_CAPS capabilities = hid.capabilities();
@@ -180,12 +170,19 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
         if (res.first)
             DWORD dwError = GetLastError();
 */
+        // Initialize cockpit (load python module)
+        py::object cokpit_mod = py::import(boost::to_utf8(cockpit_file).c_str());
+	    py::object cockpit_class = cokpit_mod.attr("cockpit");
+    	
+        //Construct the (derived) python cockpit
+	    py::object py_cockpit = cockpit_class("test.cfg");
+        basic_cockpit& cockpit = py::extract<basic_cockpit&>(py_cockpit);
+
+        //Call the initialize member function
+	    cockpit.initialize(/*sc*/);
+
         // Initiate a read from the USB device
         usb.read(input_buffer);
-
-        // Initialize cockpit
-        cockpit ckpt(boost::to_utf8(cockpit_file));
-        ckpt.initialize(sc);
 
 		// Set a notification when the simulation starts so we can get initial value
 		// and set output accordingly.
@@ -204,7 +201,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
 		events[EVENT_HID] = hid_event.get();
 
         bool quit = false;
-        context<cockpit> ctxt(quit, ckpt);
+        context<basic_cockpit> ctxt(quit, cockpit);
         while (!quit)
         {
             DWORD EvtId = ::WaitForMultipleObjects(events.size(), events.c_array(), FALSE, INFINITE);
@@ -212,7 +209,7 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
             switch (EvtId)
             {
             case WAIT_OBJECT_0 + EVENT_SIMCONNECT:
-                sc.call_dispatch(dispatch_proc<cockpit>, &quit);
+                sc.call_dispatch(dispatch_proc<basic_cockpit>, &quit);
                 break;
 
             case WAIT_ABANDONED_0 + EVENT_HID:
@@ -247,13 +244,12 @@ int WINAPI _tWinMain(HINSTANCE _hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR _
 
             default :
                 LERR_ << "unexpected event: " << EvtId;
-
             }
         }
     }
     catch(char* _ex)
     {
-        std::cerr << _ex << std::endl;    
+        LERR_ << _ex << std::endl;    
     }
     catch (win::runtime_error& _ex)
     {
