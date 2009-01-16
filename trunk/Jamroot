@@ -21,7 +21,7 @@ project fsc
 	   <toolset>msvc:<define>UNICODE
 	   <toolset>msvc:<define>_UNICODE
      # remove the secure check
-     <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
+     #<toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0 (should NOT be set : known bug in sstream)
      <toolset>msvc:<define>_SECURE_SCL=0
      # add SSE2 and global optimization
      #<toolset>msvc:<cxxflags>/arch:SSE2
