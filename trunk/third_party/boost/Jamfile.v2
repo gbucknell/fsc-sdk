@@ -30,19 +30,15 @@ project all-boost
      # primarily because it caused troubles with V2
      <define>BOOST_ALL_NO_LIB=1
      <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
-     <define>BOOST_UBLAS_USE_ITERATING 
+     <define>BOOST_LOG_DONOT_USE_WCHAR_T
      <threading>multi:<define>BOOST_HAS_THREADS
-     <toolset>msvc:<define>_SECURE_SCL=0
-     <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
    : usage-requirements <include>$(boost-root) <include>$(sandbox-root)
      # disable auto-linking for all targets here,
      # primarily because it caused troubles with V2
      <define>BOOST_ALL_NO_LIB=1
      <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
-     <define>BOOST_UBLAS_USE_ITERATING
+     <define>BOOST_LOG_DONOT_USE_WCHAR_T
      <threading>multi:<define>BOOST_HAS_THREADS
-     <toolset>msvc:<define>_SECURE_SCL=0
-     <toolset>msvc:<define>_HAS_ITERATOR_DEBUGGING=0
    ;
 
 
