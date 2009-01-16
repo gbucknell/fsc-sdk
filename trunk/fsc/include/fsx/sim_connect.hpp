@@ -26,6 +26,10 @@
 #include <windows.h>
 #include <SimConnect.h>
 
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/hashed_index.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/multi_index/sequenced_index.hpp>
 #include <boost/utility.hpp>
 
 
@@ -33,6 +37,18 @@
 
 
 namespace fsx {
+
+namespace detail {
+
+struct record
+{
+    record(DWORD _id, std::string _descr) : id_(_id), descr_(_descr) {}
+
+    DWORD id_;
+    std::string descr_;
+};
+
+} //namespace detail
 
 
 /// Sim connect object. Encapuslate the SimConnect handle.
@@ -350,12 +366,49 @@ public:
     }
     //@}
 
+    /// \name Tracking Errors 
+    //@{
+    /// Given the ID of an erroneous packet, find the description string of the call
+    std::string get_record(DWORD _id) const
+    {
+        const ordered_records_type& or = boost::multi_index::get<1>(records);
+        ordered_records_type::const_iterator it = or.find(_id);
+
+        if (it != or.end())
+            return it->descr_;
+        else
+            return "Description not found";
+    }
+    //@}
+
 private:
     HANDLE hsc_;
+
+    typedef boost::multi_index::multi_index_container<
+        detail::record,
+        boost::multi_index::indexed_by<
+            boost::multi_index::sequenced<>,
+            boost::multi_index::hashed_unique<BOOST_MULTI_INDEX_MEMBER(detail::record, DWORD, id_)> >
+    > records_type;
+
+    typedef records_type::nth_index<1>::type ordered_records_type;
+
+    static const size_t max_records = 255;
+    records_type records;    
+
+    // Record the ID along with the identification string
+    void add_record(std::string _desc)
+    {
+        DWORD id;
+        int hr = SimConnect_GetLastSentPacketID(hsc_, &id);
+
+        records.push_front(detail::record(id, _desc));
+        if (records.size() > max_records)
+            records.pop_back();
+    }
 };
 
 
 } //namespace fsx
-
 
 #endif //__FSX_SIM_CONNECT_HPP__
