@@ -13,8 +13,9 @@ project fsc
 
 
 exe fsc
-   : cockpit.cpp
-     log.cpp
+   : log.cpp
+     cockpit.cpp
+     python.cpp
      win_human_input_device.cpp
      iocards_usb_expansion_card.cpp
      iocards_master_card.cpp
@@ -24,10 +25,10 @@ exe fsc
      fsc.rc
      /tp//pch
      /all-boost//headers
-	  /boost/program_options
-	  /boost/python//boost_python
-	  /wsk
-	  /wdk
+	   /boost/program_options
+	   /boost/python//boost_python
+	   /wsk
+	   /wdk
      /fsx
    : <user-interface>gui
    ;
