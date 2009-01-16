@@ -15,9 +15,10 @@
 template <class CockpitT>
 struct context
 {
-    context(bool& _quit, CockpitT& _cockpit) : quit_(_quit), cockpit_(_cockpit) {}
+    context(bool& _quit, sim_connect& _sc, CockpitT& _cockpit) : quit_(_quit), _sc(sc_), cockpit_(_cockpit) {}
 
     bool& quit_;
+    sim_connect& sc_;
     CockpitT& cockpit_;
 };
 
@@ -121,6 +122,17 @@ void CALLBACK dispatch_proc(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext
             //}
             break;
         }
+
+        case SIMCONNECT_RECV_ID_EXCEPTION:
+        {
+            SIMCONNECT_RECV_EXCEPTION *except = (SIMCONNECT_RECV_EXCEPTION*)pData;
+            LERR_ << "Exception " << except->dwException << " SendID " << except->dwSendID << " Index " << except->dwIndex << " Data " << cbData;
+
+			// Locate the bad call and print it out
+            LERR_ << ctxt.sc_.;
+            break;
+        }
+
 
         default:
             LERR_ << "unexpected FSX event;" << pData->dwID;
