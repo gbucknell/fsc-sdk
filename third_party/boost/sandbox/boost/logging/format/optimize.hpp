@@ -74,6 +74,8 @@ namespace optimize {
 
         cache_string_one_str() : m_reserve_prepend(10), m_reserve_append(10), m_grow_size(10), m_full_msg_computed(false) {}
 
+        //cache_string_one_str(const cache_string_one_str& _str) {m_full_msg_computed = false;}
+
         void set_string(const string_type & str) {
             m_str.resize( str.size() + m_reserve_prepend + m_reserve_append);
             std::copy( str.begin(), str.end(), m_str.begin() + m_reserve_prepend);
