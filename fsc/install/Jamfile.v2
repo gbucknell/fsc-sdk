@@ -1,0 +1,11 @@
+#  (c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+
+using wix ;
+
+
+msi fsc-sdk
+   : fsc.wxs
+   ;
