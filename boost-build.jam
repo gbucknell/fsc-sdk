@@ -6,6 +6,7 @@
 #~ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 FSC_ROOT = $(.boost-build-file:D) ;
+BOOST_BUILD_PATH += $(FSC_ROOT)/tools/build ;
 BOOST_BUILD = [ MATCH --boost-build=(.*) : $(ARGV) ] ;
 BOOST_BUILD ?= third_party/boost/boost/tools/build/v2 ;
 boost-build $(BOOST_BUILD) ;
