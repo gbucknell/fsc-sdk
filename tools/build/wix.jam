@@ -96,11 +96,11 @@ rule light ( )
 
 actions src-to-obj
 {
-  $(.candle) $(>)
+  "$(.candle)" -out $(<) $(>)
 }
 
 
 actions obj_to_msi
 {
-  $(.light) -out $(<) $(>)
+  "$(.light)" -out $(<) $(>)
 }
