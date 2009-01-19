@@ -1,0 +1,106 @@
+#  (c) Copyright 2008 Samuel Debionne.
+#
+#  See http://code.google.com/p/fsc-sdk/ for the library home page.
+
+#  This module defines rules to handle generation of MSI
+#  (Microsoft Installer) files.
+
+import "class" : new ;
+import targets ;
+import feature ;
+import property ;
+import generators ;
+import os ;
+import type ;
+import toolset : flags ;
+
+type.register WXS : wxs ;       # WiX Source File
+type.register WIXOBJ : wixobj ; # WiX Object File
+type.register MSI : msi ;       # Windows Installer Installation Package
+
+# Initialize the WiX module. Parameters are:
+#   name: the directory of the 'wix' executable.
+rule init ( wix-dir ? )
+{
+  if ! $(.initialized)
+  {
+    .initialized = true ;
+
+    if [ os.name ] = NT
+    {
+        local ProgramFiles = [ modules.peek : ProgramFiles ] ;
+        if $(ProgramFiles)
+        {
+            ProgramFiles = "$(ProgramFiles:J= )" ;
+        }
+        else
+        {
+            ProgramFiles = "C:\\Program Files" ;
+        }
+
+        local search-path =
+          $(wix-dir)
+          [ modules.peek : PATH ]
+          "$(ProgramFiles)\\Windows Installer XML v3\\bin" ;
+
+        ECHO $(search-path) ;
+        
+        local candle-path = [ GLOB $(search-path) : candle\.exe ] ;
+        ECHO $(candle-path) ;
+        candle-path = $(candle-path[1]) ;
+    
+
+        local light-path = [ GLOB $(search-path) : light\.exe ] ;
+        light-path = $(light-path[1]) ;
+        
+        if $(candle-path)
+        {
+            if --debug-configuration in [ modules.peek : ARGV ]
+            {
+                ECHO "notice:" using candle ":" $(candle-path) ;
+            }
+            .candle = $(candle-path) ;
+        }
+
+        if $(light-path)
+        {
+            if --debug-configuration in [ modules.peek : ARGV ]
+            {
+                ECHO "notice:" using light ":" $(light-path) ;
+            }
+            .light = $(light-path) ;
+        }
+    }
+    else
+    {
+        ECHO "not available under unix" ;
+    }
+
+    generators.register-standard wix.src-to-obj : WXS : WIXOBJ ;
+    generators.register-composing wix.obj_to_msi : WIXOBJ : MSI ;
+  }
+}
+
+
+rule candle ( )
+{
+  return $(.candle) ;
+}
+
+
+rule light ( )
+{
+  return $(.light) ;
+}
+
+
+actions src-to-obj
+{
+  $(.candle) $(>)
+}
+
+
+actions obj_to_msi
+{
+  $(.light) -out $(<) $(>)
+}
