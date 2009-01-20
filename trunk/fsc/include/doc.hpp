@@ -1,8 +1,9 @@
 //  (c) Copyright 2008 Samuel Debionne.
 //
-//  Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//  Distributed under the MIT Software License. (See accompanying file
+//  license.txt) or copy at http://www.opensource.org/licenses/mit-license.php)
+//
+//  See http://code.google.com/p/fsc-sdk/ for the library home page.
 //
 //	$Revision: $
 //	$History: $
