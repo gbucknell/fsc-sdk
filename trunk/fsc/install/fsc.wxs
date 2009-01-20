@@ -11,20 +11,57 @@
   $History: $
 -->
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-  <Product Name='FSC-SDK' Id='00A7555A-E63D-11DD-B7AD-A46755D89593' Language='1033' Version='0.1.0.0' Manufacturer='Todo Corporation'>
-  
-    <Package Description='Flight Simulator Cockpit SDK'
-           Comments='This is my first attempt at creating a Windows Installer database'
-           Manufacturer='Todo Corporation' InstallerVersion='200' Compressed='yes' />
-  
-    <Directory Id='TARGETDIR' Name='SourceDir'>
-       <Component Id='MyComponent' Guid='PUT-GUID-HERE' />
-    </Directory>
-  
-    <Feature Id='MyFeature' Title='My 1st Feature' Level='1'>
-       <ComponentRef Id='MyComponent' />
-    </Feature>
+    <Product Name='FSC-SDK' Id='00A7555A-E63D-11DD-B7AD-A46755D89593' UpgradeCode='8a61000f-715b-4591-a985-1bafe03731a9' Language='1033' Version='0.1.0.0' Manufacturer='ToCo Corporation'>
 
+        <Package Description='Flight Simulator Cockpit SDK'
+               Comments='This is my first attempt at creating a Windows Installer database'
+               Manufacturer='ToCo Corporation' InstallerVersion='200' Compressed='yes' />
 
-  </Product>
+        <Media Id="1" Cabinet="fsc.cab" EmbedCab="yes" />
+
+        <Icon Id="Icon" SourceFile="src\fsc.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="Icon" />
+
+        <!-- Define the directory structure -->
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="APPLICATIONROOTDIRECTORY" Name="FSC-SDK"/>
+            </Directory>
+        </Directory>
+
+        <!-- Let the user choose a directory where the product will be installed -->
+        <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY" />
+        <UIRef Id="WixUI_InstallDir" />
+
+        <!-- Add files to our installer package -->
+        <DirectoryRef Id="APPLICATIONROOTDIRECTORY">
+            <Component Id='License' Guid='B95C7416-7303-4e0d-B141-D02C76FF02B8'>
+                <File Id='License' Name='license.txt' Source='../../license.txt' KeyPath="yes" Checksum="yes" />
+            </Component>
+            <Component Id='Application' Guid='F90E085B-17C9-4e51-B621-A1064E5A7B56'>
+                <File Id='Application' Name='fsc.exe' Source='../../dist/fsc.exe' KeyPath="yes" />
+            </Component>
+            <Component Id='Documentation' Guid='9B7A331E-27A9-40b2-A6FF-D84FEA68773A'>
+                <File Id='Documentation' Name='fsc.chm' Source='../../dist/fsc.chm' KeyPath="yes"  />
+            </Component>
+        </DirectoryRef>
+
+        <!-- Tell WiX to install the files -->
+        <Feature Id='MyFeature' Title='My 1st Feature' Level='1'>
+            <ComponentRef Id='License' />
+            <ComponentRef Id='Application' />
+            <ComponentRef Id='Documentation' />
+        </Feature>
+
+        <!--
+    <Condition Message="A newer version of [ProductName] is already 
+    installed.  You must uninstall that package before this one can be 
+    installed.">Installed OR NOT NEWERVERSIONDETECTED</Condition>
+    <Upgrade Id="00A7555A-E63D-11DD-B7AD-A46755D89593">
+      <UpgradeVersion Minimum="$(var.Version)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
+      <UpgradeVersion Maximum="$( var.Version)" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
+    </Upgrade>
+    -->
+
+    </Product>
 </Wix>
