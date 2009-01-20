@@ -17,34 +17,24 @@
 #define __GUI_INIT_HPP__
 
 
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+
 // ATL headers are included in the precompiled header
+#include <log.hpp>
 
 
 namespace gui {
 
 
-void init_wtl(HINSTANCE _hInstance)
-{
-    HRESULT hRes = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
-    ATLASSERT(SUCCEEDED(hRes));
+/// (Co) initialize ATL and common controls, create the message lood and run the main frame.
+void init_wtl(HINSTANCE _hInstance);
 
-    // this resolves ATL window thunking problem when Microsoft Layer for Unicode (MSLU) is used
-    ::DefWindowProc(NULL, 0, 0, 0L);
+/// End the message loop and unitialize ATL
+void uninit_wtl();
 
-    AtlInitCommonControls(ICC_COOL_CLASSES | ICC_BAR_CLASSES);	// add flags to support other controls
-
-    hRes = _Module.Init(NULL, _hInstance);
-    ATLASSERT(SUCCEEDED(hRes));
-
-    AtlAxWinInit();
-}
-
-
-void uninit_wtl()
-{
-    _Module.Term();
-    ::CoUninitialize();
-}
 
 } //namespace gui
 
