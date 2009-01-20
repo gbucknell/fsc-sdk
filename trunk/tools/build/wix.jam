@@ -18,6 +18,9 @@ type.register WXS : wxs ;       # WiX Source File
 type.register WIXOBJ : wixobj ; # WiX Object File
 type.register MSI : msi ;       # Windows Installer Installation Package
 
+feature.feature extension : : free ;
+feature.feature cultures : : free ;
+
 # Initialize the WiX module. Parameters are:
 #   name: the directory of the 'wix' executable.
 rule init ( wix-dir ? )
@@ -42,13 +45,9 @@ rule init ( wix-dir ? )
           $(wix-dir)
           [ modules.peek : PATH ]
           "$(ProgramFiles)\\Windows Installer XML v3\\bin" ;
-
-        ECHO $(search-path) ;
         
         local candle-path = [ GLOB $(search-path) : candle\.exe ] ;
-        ECHO $(candle-path) ;
         candle-path = $(candle-path[1]) ;
-    
 
         local light-path = [ GLOB $(search-path) : light\.exe ] ;
         light-path = $(light-path[1]) ;
@@ -96,11 +95,14 @@ rule light ( )
 
 actions src-to-obj
 {
-  "$(.candle)" -out $(<) $(>)
+  "$(.candle)" -nologo -out $(<) $(>)
 }
 
 
+flags wix.obj_to_msi EXTENSION <extension> ;
+flags wix.obj_to_msi CULTURES <cultures> ;
+
 actions obj_to_msi
 {
-  "$(.light)" -out $(<) $(>)
+  "$(.light)" -ext $(EXTENSION) -cultures:$(CULTURES) -nologo -out $(<) $(>)
 }
