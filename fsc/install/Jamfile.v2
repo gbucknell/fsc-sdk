@@ -8,4 +8,6 @@ using wix ;
 
 msi fsc-sdk
    : fsc.wxs
+   : <extension>WixUIExtension
+     <cultures>en-us
    ;
