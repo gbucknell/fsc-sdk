@@ -18,6 +18,8 @@ import sequence ;
 
 
 path-constant BOOST_ROOT : . ;
+constant BOOST_VERSION : 1.37.0 ;
+constant BOOST_JAMROOT_MODULE : $(__name__) ;
 
 
 local boost-root = [ path.make "./boost" ] ;
@@ -49,6 +51,47 @@ alias headers : : : : <include>$(boost-root) <include>$(sandbox-root) ;
 # iostream configuration
 # path-constant ZLIB_SOURCE : ../zlib/zlib ;
 # constant NO_BZIP2 : 1 ;
+
+
+# This rule is called by Boost.Build to determine the name of
+# target. We use it to encode build variant, compiler name and
+# boost version in the target name
+rule tag ( name : type ? : property-set )
+{
+    if $(type) in STATIC_LIB SHARED_LIB IMPORT_LIB
+    {
+        if $(layout) = versioned
+        {
+            local result = [ common.format-name
+                <base> <toolset> <threading> <runtime> -$(BOOST_VERSION_TAG)
+                -$(BUILD_ID)
+                : $(name) : $(type) : $(property-set) ] ;
+            
+            # Optionally add version suffix.
+            # On NT, library with version suffix won't be recognized
+            # by linkers. On CYGWIN, we get strage duplicate symbol
+            # errors when library is generated with version suffix.
+            # On OSX, version suffix is not needed -- the linker expets
+            # libFoo.1.2.3.dylib format.
+            # AIX linkers don't accept version suffixes either.
+            # Pgi compilers can't accept library with version suffix
+            if $(type) = SHARED_LIB &&
+              ( ! ( [ $(property-set).get <target-os> ] in windows cygwin darwin aix ) &&
+                ! ( [ $(property-set).get <toolset> ] in pgi ) )
+            {
+                result = $(result).$(BOOST_VERSION)  ;
+            }
+            
+            return $(result) ;
+        }
+        else
+        {
+            return [ common.format-name
+                <base> <threading> <runtime> -$(BUILD_ID)
+                : $(name) : $(type) : $(property-set) ] ;
+        }
+    }
+}
 
 
 # This rule should be called from libraries' Jamfiles and will
