@@ -29,11 +29,16 @@
 namespace gui {
 
 
-/// (Co) initialize ATL and common controls, create the message lood and run the main frame.
-void init_wtl(HINSTANCE _hInstance);
+/// (Co) initialize ATL and common controls, create the message loop.
+void init(HINSTANCE _hInstance);
+
+
+/// Run the main frame.
+void run();
+
 
 /// End the message loop and unitialize ATL
-void uninit_wtl();
+void uninit();
 
 
 } //namespace gui
