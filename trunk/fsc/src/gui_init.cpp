@@ -11,12 +11,13 @@
 
 #include "precompiled_header.h"
 #include <gui/init.hpp>
+#include <gui/main_frame.hpp>
 
 
 using namespace gui;
 
 
-void init_wtl(HINSTANCE _hInstance)
+void gui::init(HINSTANCE _hInstance)
 {
     HRESULT hRes = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
     ATLASSERT(SUCCEEDED(hRes));
@@ -30,13 +31,17 @@ void init_wtl(HINSTANCE _hInstance)
     ATLASSERT(SUCCEEDED(hRes));
 
     AtlAxWinInit();
+}
 
+
+void gui::run()
+{
     //Create and register message loop
     WTL::CMessageLoop loop;
 	_Module.AddMessageLoop(&loop);
-
+    
     //Create main frame
-	main_frame wnd;
+    gui::main_frame wnd;
 	if (wnd.CreateEx() == NULL)
     	LERR_ << "Main window creation failed!";
 
@@ -46,7 +51,7 @@ void init_wtl(HINSTANCE _hInstance)
 }
 
 
-void uninit_wtl()
+void gui::uninit()
 {
 	_Module.RemoveMessageLoop();
 
