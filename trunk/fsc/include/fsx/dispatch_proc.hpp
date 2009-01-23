@@ -9,28 +9,24 @@
 //	$History: $
 
 
-#include <fsx/sim_connect.hpp>
+#if !defined(__FSX_DISPATCH_PROC_HPP__)
+#define __FSX_DISPATCH_PROC_HPP__
 
 
-template <class CockpitT>
-struct context
-{
-    context(bool& _quit, sim_connect& _sc, CockpitT& _cockpit) : quit_(_quit), _sc(sc_), cockpit_(_cockpit) {}
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
 
-    bool& quit_;
-    sim_connect& sc_;
-    CockpitT& cockpit_;
-};
+
+#include <log.hpp>
+#include <cockpit.hpp>
 
 
 /// A callback function to handle all the communications with the SimConnect server
-template <class CockpitT>
 inline
 void CALLBACK dispatch_proc(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext)
 {
-	typedef context<CockpitT> context_t;
-
-    context_t& ctxt = *(context_t*)pContext;
+    basic_cockpit& ckpt = *(basic_cockpit*)pContext;
 
     switch(pData->dwID)
     {
@@ -53,13 +49,13 @@ void CALLBACK dispatch_proc(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext
 
         case SIMCONNECT_RECV_ID_QUIT:
             //Handle exiting the application
-            ctxt.quit_ = true;
+            ::PostQuitMessage(0);
             break;
 
         case SIMCONNECT_RECV_ID_SIMOBJECT_DATA:
         {
             SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData = (SIMCONNECT_RECV_SIMOBJECT_DATA*) pData;
-            ctxt.cockpit_.on_rcv_sim_data(*pObjData);
+            ckpt.on_rcv_sim_data(/**pObjData*/);
 
             //switch(pObjData->dwRequestID)
             //{
@@ -85,7 +81,7 @@ void CALLBACK dispatch_proc(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext
         case SIMCONNECT_RECV_ID_EVENT:
         {
             SIMCONNECT_RECV_EVENT *evt = (SIMCONNECT_RECV_EVENT*)pData;
-            ctxt.cockpit_.on_rcv_sim_event(*evt);
+            //ckpt.on_rcv_sim_event(*evt);
 
             //switch(evt->uEventID)
             //{
@@ -129,7 +125,7 @@ void CALLBACK dispatch_proc(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext
             LERR_ << "Exception " << except->dwException << " SendID " << except->dwSendID << " Index " << except->dwIndex << " Data " << cbData;
 
 			// Locate the bad call and print it out
-            LERR_ << ctxt.sc_.;
+            LERR_ << ckpt.sim().get_record(except->dwSendID);
             break;
         }
 
@@ -139,3 +135,6 @@ void CALLBACK dispatch_proc(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext
             break;
     }
 }
+
+
+#endif //__FSX_DISPATCH_PROC_HPP__
