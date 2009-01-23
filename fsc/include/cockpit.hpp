@@ -23,9 +23,11 @@
 
 
 #include <fsx/sim_connect.hpp>
+#include <fsx/sim_event.hpp>
+#include <iocards/usb_expansion_card.hpp>
 
 
-class cockpit
+class basic_cockpit
 {
 public:
     enum GROUP_ID {
@@ -60,19 +62,34 @@ public:
         int right_angle;
     };
 
-    cockpit(const std::string& _path);
-    ~cockpit();
+    basic_cockpit(
+        std::string _config_path,
+        fsx::sim_connect& _sim,
+        iocards::usb_expansion_card& _hw);
+    
+    virtual ~basic_cockpit() {}
 
-    void initialize(fsx::sim_connect& _sc);
+    void initialize();
 
-    void on_rcv_sim_data(SIMCONNECT_RECV_SIMOBJECT_DATA& _data);
-    void on_rcv_sim_event(SIMCONNECT_RECV_EVENT& _evt);
+    //virtual void on_rcv_sim_data(SIMCONNECT_RECV_SIMOBJECT_DATA& _data) = 0;
+    virtual int on_rcv_sim_data() = 0;
+    //virtual void on_rcv_sim_event(SIMCONNECT_RECV_EVENT& _evt) = 0;
 
-    void map_sim_event_to_output();
-    void map_input_to_sim_event();
+    //void map_sim_event_to_output();
+    //void map_input_to_sim_event();
 
-private:
+    void transmit_sim_event(const fsx::sim_event& _evt);
+
+    fsx::sim_connect& sim() {return sim_;}
+    iocards::usb_expansion_card& hw() {return hw_;}
+
+private:    
     std::string name_;
+    //std::queue<fsx::sim_event> transmit_sim_event_queue;
+    //std::queue<fsx::sim_event> transmit_hid_event_queue;
+
+    fsx::sim_connect& sim_;
+    iocards::usb_expansion_card& hw_;
 };
 
 
