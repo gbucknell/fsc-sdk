@@ -9,8 +9,8 @@
 //	$History: $
 
 
-#if !defined(__PYTHON_HPP__)
-#define __PYTHON_HPP__
+#if !defined(__PYTHON_INIT_HPP__)
+#define __PYTHON_INIT_HPP__
 
 
 #if _MSC_VER > 1000
@@ -18,11 +18,19 @@
 #endif // _MSC_VER > 1000
 
 
-#include <python/init.hpp>
-#include <python/cockpit.hpp>
+class basic_cockpit;
 
 
-extern "C" void initfsc(void);
+namespace python {
+
+/// Initialize the python interpreter
+void init();
+
+/// Get the last error message
+std::string get_error();
 
 
-#endif //__PYTHON_HPP__
+} //namespace python
+
+
+#endif //__PYTHON_INIT_HPP__
