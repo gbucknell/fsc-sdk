@@ -31,15 +31,24 @@
 namespace win {
 
 
+typedef boost::shared_ptr<void> event_t;
+
+
 inline
-boost::shared_ptr<void> 
-create_event(BOOL _bManualReset = FALSE)
+event_t create_event(BOOL _bManualReset = FALSE)
 {
-    boost::shared_ptr<void> h(::CreateEvent(NULL, _bManualReset, FALSE, NULL), ::CloseHandle);
+    event_t h(::CreateEvent(NULL, _bManualReset, FALSE, NULL), ::CloseHandle);
     if (!h)
         throw runtime_error("CreateEvent failed");
 
     return h;
+}
+
+inline
+void set(event_t _h)
+{
+    if (::SetEvent(_h.get()))
+        throw runtime_error("SetEvent failed");
 }
 
 
