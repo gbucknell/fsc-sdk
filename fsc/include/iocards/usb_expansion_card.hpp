@@ -24,6 +24,7 @@
 #include <boost/shared_array.hpp>
 #include <boost/cstdint.hpp>
 
+#include <assert.hpp>
 #include <win/human_input_device.hpp>
 
 
@@ -43,18 +44,16 @@ public:
     /// Open an USB expansion card with a given number of connected master cards and used A/D converters.
     BOOL open(boost::uint8_t _nb_of_master_cards, boost::uint8_t _nb_of_ad_converters, HANDLE _evt);
 
-    template <class RandomAccessContainer>
-    DWORD read(RandomAccessContainer& _in)
+    DWORD read()
     {
-        _ASSERT(_in.size() <= input_size());
-        return hid_.read(&_in[0], _in.size());
+        FSC_PRECONDITION(input_buffer_.size() <= input_size());
+        return hid_.read(&input_buffer_[0], input_buffer_.size());
     }
 
-    template <class RandomAccessContainer>
-    DWORD write(const RandomAccessContainer& _out)
+    DWORD write()
     {
-        _ASSERT(_out.size() <= output_size());
-        return hid_.write(&_out[0], _out.size());
+        FSC_PRECONDITION(output_buffer_.size() <= output_size());
+        return hid_.write(&output_buffer_[0], output_buffer_.size());
     }
 
     BOOL cancel_io() const {return hid_.cancel_io();}
@@ -66,6 +65,9 @@ public:
     boost::uint8_t nb_of_master_cards() const {return nb_of_master_cards_;}
     boost::uint8_t nb_of_ad_converters() const {return nb_of_ad_converters_;}
 
+    std::vector<boost::uint8_t>& input_buffer() {return input_buffer_;}
+    std::vector<boost::uint8_t>& output_buffer() {return output_buffer_;}
+
 private:
 	win::human_input_device hid_;
     size_t size_in_;
@@ -73,6 +75,9 @@ private:
 
     boost::uint8_t nb_of_master_cards_;
     boost::uint8_t nb_of_ad_converters_;
+
+    std::vector<boost::uint8_t> input_buffer_;
+    std::vector<boost::uint8_t> output_buffer_;
 };
 
 
