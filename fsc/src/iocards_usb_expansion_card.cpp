@@ -36,6 +36,10 @@ BOOL usb_expansion_card::open(boost::uint8_t _nb_of_master_cards, boost::uint8_t
         size_in_ = capabilities.InputReportByteLength;
         size_out_ = capabilities.OutputReportByteLength;
 
+        //Resize buffers accordingly
+        input_buffer_.resize(size_in_);
+        output_buffer_.resize(size_out_);
+
         // Write configuration
         unsigned char config[] = {0x00, 0x3D, 0x00, 0x3A, 0x00, 0x39, 0x00, 0xFF, 0xFF};
         config[4] = _nb_of_master_cards;
