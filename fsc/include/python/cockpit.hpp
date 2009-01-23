@@ -9,8 +9,8 @@
 //	$History: $
 
 
-#if !defined(__PYTHON_HPP__)
-#define __PYTHON_HPP__
+#if !defined(__PYTHON_COCKPIT_HPP__)
+#define __PYTHON_COCKPIT_HPP__
 
 
 #if _MSC_VER > 1000
@@ -18,11 +18,21 @@
 #endif // _MSC_VER > 1000
 
 
-#include <python/init.hpp>
-#include <python/cockpit.hpp>
+class basic_cockpit;
 
 
-extern "C" void initfsc(void);
+namespace python {
 
 
-#endif //__PYTHON_HPP__
+//Construct a cockpit object
+basic_cockpit& make_cockpit(
+    std::string _cockpit_file,
+    std::string _config_path,
+    fsx::sim_connect& _sim,
+    iocards::usb_expansion_card& _hw);
+
+
+} //namespace python
+
+
+#endif //__PYTHON_COCKPIT_HPP__
