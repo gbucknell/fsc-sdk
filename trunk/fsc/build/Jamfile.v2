@@ -13,20 +13,25 @@ project fsc
 
 
 exe fsc
-   : log.cpp
+   : main.cpp
+     log.cpp
      cockpit.cpp
-     python.cpp
+     python_init.cpp
+     python_module.cpp
+     python_cockpit.cpp
      win_human_input_device.cpp
      iocards_usb_expansion_card.cpp
      iocards_master_card.cpp
      # fsx_dispatch_proc.cpp
+     gui_init.cpp
+     gui_main_frame.cpp
      gui_taskbar_notify_icon.cpp   
-     main.cpp
      fsc.rc
      /tp//pch
      /all-boost//headers
 	   /boost/program_options
 	   /boost/python//boost_python
+	   /boost/thread//boost_thread
 	   /wsk
 	   /wdk
      /fsx
