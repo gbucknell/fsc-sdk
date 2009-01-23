@@ -73,24 +73,27 @@ BOOL human_input_device::open(USHORT _VendorId, USHORT _ProductId, HANDLE _hOver
 
         // Open a file handle to the device.  Make sure the attibutes specify overlapped transactions or the IN
         // transaction may block the input thread.
-        hid_ = ::CreateFile(detail_data->DevicePath, GENERIC_READ | GENERIC_WRITE,
+        HANDLE hid = ::CreateFile(detail_data->DevicePath, GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
 
         // Get the Device VID & PID to see if it's the device we want
-        if(hid_ != INVALID_HANDLE_VALUE)
+        if(hid != INVALID_HANDLE_VALUE)
         {
             // HID device attributes
             HIDD_ATTRIBUTES HIDAttrib;
             HIDAttrib.Size = sizeof(HIDAttrib);
-            HidD_GetAttributes(	hid_, &HIDAttrib);
+            HidD_GetAttributes(hid, &HIDAttrib);
 
             if((HIDAttrib.VendorID == _VendorId) && (HIDAttrib.ProductID == _ProductId))
+            {
+                hid_ = handle_t(hid, ::CloseHandle);
                 return TRUE;	// found HID device
+            }
 
             // Close the Device Handle because we didn't find the device
             // with the correct VID and PID
-            ::CloseHandle(hid_);
-            hid_ = INVALID_HANDLE_VALUE;
+            ::CloseHandle(hid);
+            hid = INVALID_HANDLE_VALUE;
         }
     }
 
@@ -108,7 +111,7 @@ HIDP_CAPS human_input_device::capabilities() const
     // get a handle to a buffer that describes the device's capabilities.  This
     // line plus the following two lines of code extract the report length the
     // device is claiming to support
-    ::HidD_GetPreparsedData(hid_, &HidParsedData);
+    ::HidD_GetPreparsedData(handle(), &HidParsedData);
 	
     // Extract the capabilities info
     ::HidP_GetCaps(HidParsedData, &capabilities);
