@@ -1,0 +1,1 @@
+Since the bug tracker of Google Code does not provide a feature request submission form, they will be collected here.

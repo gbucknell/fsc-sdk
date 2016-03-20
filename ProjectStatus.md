@@ -1,0 +1,2 @@
+#### Sunday 2<sup>nd</sup> of nomvember 2008 ####
+The project is yet in its very early phase of development. The infrastrucure (build system and documentation) is operational. Third party libraries are included and added to the build system.
